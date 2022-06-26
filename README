@@ -1,2 +1,9 @@
 Integer-keyed radix sort for ATS2/Postiats
 ------------------------------------------
+
+Initial tests suggest this sort can be much, much faster than GNU
+qsort(3), although the kinds of keys it can handle is much more
+limited.
+
+(Hopefully my tests are written correctly. They have not always been
+when I was timing sorts. :) )
