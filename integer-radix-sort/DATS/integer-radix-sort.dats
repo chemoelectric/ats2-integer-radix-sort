@@ -36,8 +36,8 @@ copy_memory (dst       : ptr,
 
 (*------------------------------------------------------------------*)
 
-(* The radix is 256. The sort is least significant ‘digit’ first and
-   is stable. *)
+(* The radix is 256. The sorting is done ‘least significant digit
+   first’ and is stable. *)
 
 (* WARNING: Much of the following code does NOT respect the linearity
             of array entries. But this unsafeness is hidden from the
