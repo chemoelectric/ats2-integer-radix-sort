@@ -1,5 +1,5 @@
-Integer-keyed radix sort for ATS2/Postiats
-------------------------------------------
+Integer-keyed stable radix sort for ATS2/Postiats
+-------------------------------------------------
 
 This package began as a contribution to Rosetta Code.
 
