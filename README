@@ -1,6 +1,8 @@
 Integer-keyed radix sort for ATS2/Postiats
 ------------------------------------------
 
+This package began as a contribution to Rosetta Code.
+
 Initial tests suggest this sort can be much, much faster than GNU
 qsort(3), although the kinds of keys it can handle is much more
 limited.
