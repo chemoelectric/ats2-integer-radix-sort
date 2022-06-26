@@ -91,15 +91,6 @@ test_random_arrays_with_g0uint_keys () =
          sz := max (i2sz 1, i2sz 10 * sz))
       let
         implement
-        array_quicksort$cmp<int> (x, y) =
-          if x < y then
-            ~1
-          else if x > y then
-            1
-          else
-            0
-
-        implement
         g0uint_radix_sort$key<int><uintknd> (arr, i) =
           g0i2u arr[i]
 
@@ -112,7 +103,8 @@ test_random_arrays_with_g0uint_keys () =
 
         val @(pf2, pfgc2 | p2) = array_ptr_alloc<int> sz
         val () = array_copy<int> (!p2, !p1, sz)
-        val () = array_quicksort<int> (!p2, sz)
+        val () = $extfcall (void, "qsort", p2, sz, sizeof<int>,
+                            $extval(ptr, "intcmp"))
         val lst2 = list_vt2t (array2list (!p2, sz))
 
         val @(pf3, pfgc3 | p3) = array_ptr_alloc<int> sz
