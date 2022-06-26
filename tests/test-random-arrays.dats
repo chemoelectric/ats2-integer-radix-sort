@@ -25,6 +25,14 @@ staload _ = "integer-radix-sort/DATS/integer-radix-sort.dats"
 
 %{^
 
+#include <time.h>
+
+atstype_ldouble
+get_clock (void)
+{
+  return ((atstype_ldouble) clock ()) / CLOCKS_PER_SEC;
+}
+
 int
 intcmp (const void *x, const void *y)
 {
@@ -34,6 +42,10 @@ intcmp (const void *x, const void *y)
 }
 
 %}
+
+extern fn
+get_clock :
+  () -<> ldouble = "mac#"
 
 (*------------------------------------------------------------------*)
 (* A simple linear congruential generator.                          *)
@@ -103,16 +115,27 @@ test_random_arrays_with_g0uint_keys () =
 
         val @(pf2, pfgc2 | p2) = array_ptr_alloc<int> sz
         val () = array_copy<int> (!p2, !p1, sz)
+        val t11 = get_clock ()
         val () = $extfcall (void, "qsort", p2, sz, sizeof<int>,
                             $extval(ptr, "intcmp"))
+        val t12 = get_clock ()
+        val t1 = t12 - t11
         val lst2 = list_vt2t (array2list (!p2, sz))
 
         val @(pf3, pfgc3 | p3) = array_ptr_alloc<int> sz
         val () = array_copy<int> (!p3, !p1, sz)
+        val t21 = get_clock ()
         val () = g0uint_radix_sort<int><uintknd> (!p3, sz)
+        val t22 = get_clock ()
+        val t2 = t22 - t21
         val lst3 = list_vt2t (array2list (!p3, sz))
       in
         assertloc (lst2 = lst3);
+        print! "qsort:";
+        print! t1;
+        print! "  radix:";
+        print! t2;
+        println! ();
         array_ptr_free (pf1, pfgc1 | p1);
         array_ptr_free (pf2, pfgc2 | p2);
         array_ptr_free (pf3, pfgc3 | p3)
@@ -141,16 +164,27 @@ test_random_arrays_with_g0int_keys () =
 
         val @(pf2, pfgc2 | p2) = array_ptr_alloc<int> sz
         val () = array_copy<int> (!p2, !p1, sz)
+        val t11 = get_clock ()
         val () = $extfcall (void, "qsort", p2, sz, sizeof<int>,
                             $extval(ptr, "intcmp"))
+        val t12 = get_clock ()
+        val t1 = t12 - t11
         val lst2 = list_vt2t (array2list (!p2, sz))
 
         val @(pf3, pfgc3 | p3) = array_ptr_alloc<int> sz
         val () = array_copy<int> (!p3, !p1, sz)
+        val t21 = get_clock ()
         val () = g0int_radix_sort<int><intknd, uintknd> (!p3, sz)
+        val t22 = get_clock ()
+        val t2 = t22 - t21
         val lst3 = list_vt2t (array2list (!p3, sz))
       in
         assertloc (lst2 = lst3);
+        print! "qsort:";
+        print! t1;
+        print! "  radix:";
+        print! t2;
+        println! ();
         array_ptr_free (pf1, pfgc1 | p1);
         array_ptr_free (pf2, pfgc2 | p2);
         array_ptr_free (pf3, pfgc3 | p3)
