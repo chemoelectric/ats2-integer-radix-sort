@@ -93,13 +93,15 @@ random_int (m : int, n : int)
 
 (*------------------------------------------------------------------*)
 
+#define MAX_SZ 10000000
+
 fn
-test_random_arrays_with_g0uint_keys () =
+test_random_arrays_with_g0uint_keys_1 () =
   let
     var sz : Size_t
   in
     for (sz := i2sz 0;
-         sz <= i2sz 1000000;
+         sz <= i2sz MAX_SZ;
          sz := max (i2sz 1, i2sz 10 * sz))
       let
         implement
@@ -143,12 +145,61 @@ test_random_arrays_with_g0uint_keys () =
   end
 
 fn
-test_random_arrays_with_g0int_keys () =
+test_random_arrays_with_g0uint_keys_2 () =
   let
     var sz : Size_t
   in
     for (sz := i2sz 0;
-         sz <= i2sz 1000000;
+         sz <= i2sz MAX_SZ;
+         sz := max (i2sz 1, i2sz 10 * sz))
+      let
+        implement
+        g0uint_radix_sort$key<int><uintknd> (arr, i) =
+          g0i2u arr[i]
+
+        implement
+        array_initize$init<int> (i, x) =
+          x := random_int (0, 2147483647)
+
+        val @(pf1, pfgc1 | p1) = array_ptr_alloc<int> sz
+        val () = array_initize<int> (!p1, sz)
+
+        val @(pf2, pfgc2 | p2) = array_ptr_alloc<int> sz
+        val () = array_copy<int> (!p2, !p1, sz)
+        val t11 = get_clock ()
+        val () = $extfcall (void, "qsort", p2, sz, sizeof<int>,
+                            $extval(ptr, "intcmp"))
+        val t12 = get_clock ()
+        val t1 = t12 - t11
+        val lst2 = list_vt2t (array2list (!p2, sz))
+
+        val @(pf3, pfgc3 | p3) = array_ptr_alloc<int> sz
+        val () = array_copy<int> (!p3, !p1, sz)
+        val t21 = get_clock ()
+        val () = g0uint_radix_sort<int><uintknd> (!p3, sz)
+        val t22 = get_clock ()
+        val t2 = t22 - t21
+        val lst3 = list_vt2t (array2list (!p3, sz))
+      in
+        assertloc (lst2 = lst3);
+        print! "qsort:";
+        print! t1;
+        print! "  radix:";
+        print! t2;
+        println! ();
+        array_ptr_free (pf1, pfgc1 | p1);
+        array_ptr_free (pf2, pfgc2 | p2);
+        array_ptr_free (pf3, pfgc3 | p3)
+      end
+  end
+
+fn
+test_random_arrays_with_g0int_keys_1 () =
+  let
+    var sz : Size_t
+  in
+    for (sz := i2sz 0;
+         sz <= i2sz MAX_SZ;
          sz := max (i2sz 1, i2sz 10 * sz))
       let
         implement
@@ -191,14 +242,65 @@ test_random_arrays_with_g0int_keys () =
       end
   end
 
+fn
+test_random_arrays_with_g0int_keys_2 () =
+  let
+    var sz : Size_t
+  in
+    for (sz := i2sz 0;
+         sz <= i2sz MAX_SZ;
+         sz := max (i2sz 1, i2sz 10 * sz))
+      let
+        implement
+        g0int_radix_sort$key<int><intknd> (arr, i) =
+          arr[i]
+
+        implement
+        array_initize$init<int> (i, x) =
+          x := random_int (~2147483648, 2147483647)
+
+        val @(pf1, pfgc1 | p1) = array_ptr_alloc<int> sz
+        val () = array_initize<int> (!p1, sz)
+
+        val @(pf2, pfgc2 | p2) = array_ptr_alloc<int> sz
+        val () = array_copy<int> (!p2, !p1, sz)
+        val t11 = get_clock ()
+        val () = $extfcall (void, "qsort", p2, sz, sizeof<int>,
+                            $extval(ptr, "intcmp"))
+        val t12 = get_clock ()
+        val t1 = t12 - t11
+        val lst2 = list_vt2t (array2list (!p2, sz))
+
+        val @(pf3, pfgc3 | p3) = array_ptr_alloc<int> sz
+        val () = array_copy<int> (!p3, !p1, sz)
+        val t21 = get_clock ()
+        val () = g0int_radix_sort<int><intknd, uintknd> (!p3, sz)
+        val t22 = get_clock ()
+        val t2 = t22 - t21
+        val lst3 = list_vt2t (array2list (!p3, sz))
+      in
+        assertloc (lst2 = lst3);
+        print! "qsort:";
+        print! t1;
+        print! "  radix:";
+        print! t2;
+        println! ();
+        array_ptr_free (pf1, pfgc1 | p1);
+        array_ptr_free (pf2, pfgc2 | p2);
+        array_ptr_free (pf3, pfgc3 | p3)
+      end
+  end
+
 
 (*------------------------------------------------------------------*)
 
 implement
 main0 () =
   begin
-    test_random_arrays_with_g0uint_keys ();
-    test_random_arrays_with_g0int_keys ()
+    test_random_arrays_with_g0uint_keys_1 ();
+    test_random_arrays_with_g0uint_keys_2 ();
+    test_random_arrays_with_g0int_keys_1 ();
+    test_random_arrays_with_g0int_keys_2 ()
   end
 
 (*------------------------------------------------------------------*)
