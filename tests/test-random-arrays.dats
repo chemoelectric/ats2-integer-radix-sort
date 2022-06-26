@@ -23,6 +23,18 @@ staload UN = "prelude/SATS/unsafe.sats"
 staload "integer-radix-sort/SATS/integer-radix-sort.sats"
 staload _ = "integer-radix-sort/DATS/integer-radix-sort.dats"
 
+%{^
+
+int
+intcmp (const void *x, const void *y)
+{
+  const int i = *(const int *) x;
+  const int j = *(const int *) y;
+  return (i < j) ? -1 : ((i == j) ? 0 : 1);
+}
+
+%}
+
 (*------------------------------------------------------------------*)
 (* A simple linear congruential generator.                          *)
 
@@ -146,7 +158,8 @@ test_random_arrays_with_g0int_keys () =
 
         val @(pf2, pfgc2 | p2) = array_ptr_alloc<int> sz
         val () = array_copy<int> (!p2, !p1, sz)
-        val () = array_quicksort<int> (!p2, sz)
+        val () = $extfcall (void, "qsort", p2, sz, sizeof<int>,
+                            $extval(ptr, "intcmp"))
         val lst2 = list_vt2t (array2list (!p2, sz))
 
         val @(pf3, pfgc3 | p3) = array_ptr_alloc<int> sz
