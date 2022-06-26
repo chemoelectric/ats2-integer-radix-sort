@@ -137,15 +137,6 @@ test_random_arrays_with_g0int_keys () =
          sz := max (i2sz 1, i2sz 10 * sz))
       let
         implement
-        array_quicksort$cmp<int> (x, y) =
-          if x < y then
-            ~1
-          else if x > y then
-            1
-          else
-            0
-
-        implement
         g0int_radix_sort$key<int><intknd> (arr, i) =
           arr[i]
 
