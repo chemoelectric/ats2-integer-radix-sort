@@ -4,8 +4,5 @@ Integer-keyed stable radix sort for ATS2/Postiats
 This package began as a contribution to Rosetta Code.
 
 Initial tests suggest this sort can be much, much faster than GNU
-qsort(3), although the kinds of keys it can handle is much more
-limited.
-
-(Hopefully my tests are written correctly. They have not always been
-when I was timing sorts. :) )
+qsort(3), while being stable as well. The keys must be of a g0uint or
+g0int type, however.
