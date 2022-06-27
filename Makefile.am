@@ -167,6 +167,7 @@ INTEGER_RADIX_SORT_HATS = integer-radix-sort/HATS/integer-radix-sort.hats
 nobase_dist_pkginclude_HEADERS =
 nobase_dist_pkginclude_HEADERS += $(INTEGER_RADIX_SORT_SATS)
 nobase_dist_pkginclude_HEADERS += $(INTEGER_RADIX_SORT_DATS)
+nobase_dist_pkginclude_HEADERS += $(INTEGER_RADIX_SORT_CATS)
 nobase_dist_pkginclude_HEADERS += $(INTEGER_RADIX_SORT_HATS)
 
 nodist_libats2_integer_radix_sort_la_SOURCES =
@@ -243,7 +244,7 @@ list_ats_dependencies_LDADD += -latslib
 
 #--------------------------------------------------------------------------
 
-#nodist_pkgconfig_DATA += ats2-integer-radix-sort.pc
+nodist_pkgconfig_DATA += ats2-integer-radix-sort.pc
 
 #--------------------------------------------------------------------------
 # local variables:

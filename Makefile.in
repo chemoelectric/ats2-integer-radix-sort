@@ -33,7 +33,7 @@
 #
 
 # aminclude_static.am generated automatically by Autoconf
-# from AX_AM_MACROS_STATIC on Sun Jun 26 14:47:22 CDT 2022
+# from AX_AM_MACROS_STATIC on Mon Jun 27 13:32:16 CDT 2022
 
 
 
@@ -140,7 +140,8 @@ DIST_COMMON = $(srcdir)/Makefile.am $(top_srcdir)/configure \
 am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno config.status.lineno
 mkinstalldirs = $(install_sh) -d
-CONFIG_CLEAN_FILES = list-ats-dependencies.dats
+CONFIG_CLEAN_FILES = ats2-integer-radix-sort.pc \
+	list-ats-dependencies.dats
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(libdir)" \
 	"$(DESTDIR)$(pkgconfigdir)" "$(DESTDIR)$(pkgincludedir)" \
@@ -445,6 +446,7 @@ TEST_LOG_DRIVER = $(SHELL) $(top_srcdir)/build-aux/test-driver
 TEST_LOG_COMPILE = $(TEST_LOG_COMPILER) $(AM_TEST_LOG_FLAGS) \
 	$(TEST_LOG_FLAGS)
 am__DIST_COMMON = $(srcdir)/Makefile.in \
+	$(srcdir)/ats2-integer-radix-sort.pc.in \
 	$(srcdir)/list-ats-dependencies.dats.in \
 	$(top_srcdir)/aminclude_static.am \
 	$(top_srcdir)/build-aux/compile \
@@ -662,7 +664,9 @@ LDADD = $(CODE_COVERAGE_LIBS)
 #
 lib_LTLIBRARIES = libats2-integer-radix-sort.la
 nobase_nodist_pkginclude_HEADERS = 
-nodist_pkgconfig_DATA = 
+
+#--------------------------------------------------------------------------
+nodist_pkgconfig_DATA = ats2-integer-radix-sort.pc
 CODE_COVERAGE_IGNORE_PATTERN = /usr/include/* /usr/include/*/* \
 	$(PATSHOME)/ccomp/runtime/* $(PATSHOME)/prelude/CATS/*
 
@@ -690,7 +694,8 @@ INTEGER_RADIX_SORT_DATS_C = integer-radix-sort/DATS/integer-radix-sort_dats.c
 INTEGER_RADIX_SORT_CATS = integer-radix-sort/CATS/integer-radix-sort.cats
 INTEGER_RADIX_SORT_HATS = integer-radix-sort/HATS/integer-radix-sort.hats
 nobase_dist_pkginclude_HEADERS = $(INTEGER_RADIX_SORT_SATS) \
-	$(INTEGER_RADIX_SORT_DATS) $(INTEGER_RADIX_SORT_HATS)
+	$(INTEGER_RADIX_SORT_DATS) $(INTEGER_RADIX_SORT_CATS) \
+	$(INTEGER_RADIX_SORT_HATS)
 nodist_libats2_integer_radix_sort_la_SOURCES =  \
 	$(INTEGER_RADIX_SORT_SATS_C) $(INTEGER_RADIX_SORT_DATS_C)
 libats2_integer_radix_sort_la_DEPENDENCIES =  \
@@ -750,6 +755,8 @@ $(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	$(am__cd) $(srcdir) && $(ACLOCAL) $(ACLOCAL_AMFLAGS)
 $(am__aclocal_m4_deps):
+ats2-integer-radix-sort.pc: $(top_builddir)/config.status $(srcdir)/ats2-integer-radix-sort.pc.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
 list-ats-dependencies.dats: $(top_builddir)/config.status $(srcdir)/list-ats-dependencies.dats.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 install-binPROGRAMS: $(bin_PROGRAMS)
@@ -1783,10 +1790,6 @@ tests/test-stability_tests.c: tests/test-stability.dats
 tests-clean:
 	-rm -f tests/*.$(OBJEXT)
 	-rm -f tests/*.sh
-
-#--------------------------------------------------------------------------
-
-#nodist_pkgconfig_DATA += ats2-integer-radix-sort.pc
 
 #--------------------------------------------------------------------------
 # local variables:
