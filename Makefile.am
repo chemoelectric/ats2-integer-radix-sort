@@ -162,8 +162,7 @@ INTEGER_RADIX_SORT_DATS_C = integer-radix-sort/DATS/integer-radix-sort_dats.c
 CLEANFILES += $(INTEGER_RADIX_SORT_DATS_C)
 
 INTEGER_RADIX_SORT_CATS = integer-radix-sort/CATS/integer-radix-sort.cats
-
-#INTEGER_RADIX_SORT_HATS = integer-radix-sort/HATS/integer-radix-sort.hats
+INTEGER_RADIX_SORT_HATS = integer-radix-sort/HATS/integer-radix-sort.hats
 
 nobase_dist_pkginclude_HEADERS =
 nobase_dist_pkginclude_HEADERS += $(INTEGER_RADIX_SORT_SATS)
@@ -181,6 +180,7 @@ libats2_integer_radix_sort_la_DEPENDENCIES += $(INTEGER_RADIX_SORT_CATS)
 
 TESTS =
 TESTS += tests/test-random-arrays
+TESTS += tests/test-stability
 
 EXTRA_PROGRAMS += tests/test-random-arrays
 CLEANFILES += tests/test-random-arrays
@@ -190,7 +190,7 @@ tests_test_random_arrays_SOURCES += tests/test-random-arrays_tests.c
 tests_test_random_arrays_DEPENDENCIES =
 tests_test_random_arrays_DEPENDENCIES += tests/test-random-arrays.dats
 tests_test_random_arrays_DEPENDENCIES += libats2-integer-radix-sort.la
-#tests_test_random_arrays_DEPENDENCIES += $(INTEGER_RADIX_SORT_HATS)
+tests_test_random_arrays_DEPENDENCIES += $(INTEGER_RADIX_SORT_HATS)
 tests_test_random_arrays_CPPFLAGS =
 tests_test_random_arrays_CPPFLAGS += $(AM_CPPFLAGS)
 tests_test_random_arrays_CPPFLAGS += -DATS_MEMALLOC_LIBC
@@ -198,6 +198,23 @@ tests_test_random_arrays_LDADD =
 tests_test_random_arrays_LDADD += libats2-integer-radix-sort.la
 EXTRA_DIST += tests/test-random-arrays.dats
 tests/test-random-arrays_tests.c: tests/test-random-arrays.dats
+
+EXTRA_PROGRAMS += tests/test-stability
+CLEANFILES += tests/test-stability
+CLEANFILES += tests/test-stability_tests.c
+tests_test_stability_SOURCES =
+tests_test_stability_SOURCES += tests/test-stability_tests.c
+tests_test_stability_DEPENDENCIES =
+tests_test_stability_DEPENDENCIES += tests/test-stability.dats
+tests_test_stability_DEPENDENCIES += libats2-integer-radix-sort.la
+tests_test_stability_DEPENDENCIES += $(INTEGER_RADIX_SORT_HATS)
+tests_test_stability_CPPFLAGS =
+tests_test_stability_CPPFLAGS += $(AM_CPPFLAGS)
+tests_test_stability_CPPFLAGS += -DATS_MEMALLOC_LIBC
+tests_test_stability_LDADD =
+tests_test_stability_LDADD += libats2-integer-radix-sort.la
+EXTRA_DIST += tests/test-stability.dats
+tests/test-stability_tests.c: tests/test-stability.dats
 
 tests-clean:
 	-rm -f tests/*.$(OBJEXT)

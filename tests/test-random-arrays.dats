@@ -19,9 +19,7 @@
 #include "share/atspre_staload.hats"
 
 staload UN = "prelude/SATS/unsafe.sats"
-
-staload "integer-radix-sort/SATS/integer-radix-sort.sats"
-staload _ = "integer-radix-sort/DATS/integer-radix-sort.dats"
+#include "integer-radix-sort/HATS/integer-radix-sort.hats"
 
 %{^
 
@@ -290,7 +288,6 @@ test_random_arrays_with_g0int_keys_2 () =
         array_ptr_free (pf3, pfgc3 | p3)
       end
   end
-
 
 (*------------------------------------------------------------------*)
 
